@@ -27,7 +27,7 @@ CBOR = bytes
 
 @CoseMessage.record_cbor_tag(11)
 class Countersign0Message(SignCommon):
-    context = "CounterSign0"
+    context = "CounterSignature0"
     cbor_tag = 11
     payload_tag = -1
     body_protected = b''
@@ -35,12 +35,10 @@ class Countersign0Message(SignCommon):
     enc = b''
 
     @classmethod
-    # def from_cose_obj(cls, cose_obj, allow_unknown_attributes: bool) -> 'Countersign0Message':
-    #     msg = super().from_cose_obj(cose_obj, allow_unknown_attributes)
-    #     msg._signature = cose_obj.pop(0)
-    #     return msg
-    def from_cose_obj(cls, cose_obj: list, allow_unknown_attributes: bool) -> 'Countersign0Message':
-        return super().from_cose_obj(cose_obj, allow_unknown_attributes)
+    def from_cose_obj(cls, cose_obj, allow_unknown_attributes: bool) -> 'Countersign0Message':
+        msg = super().from_cose_obj(cose_obj, allow_unknown_attributes)
+        msg._signature = cose_obj.pop(0)
+        return msg
 
     def __init__(self,
                  phdr: Optional[dict] = None,
@@ -134,6 +132,6 @@ class Countersign0Message(SignCommon):
     def __repr__(self) -> str:
         phdr, uhdr = self._hdr_repr()
 
-        return f'<COSE_CounterSign0: [{phdr}, {uhdr}, {utils.truncate(self._signature)}]>'
-
+        return f'<COSE_CounterSign0: [{phdr}, {uhdr}, {utils.truncate(self.enc)}, ' \
+               f'{utils.truncate(self._signature)}]>'
 
