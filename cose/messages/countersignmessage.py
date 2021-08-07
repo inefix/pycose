@@ -1,5 +1,5 @@
-# add to init : from .countersign0message import Countersign0Message  # noqa: F01
-# modify in headers.py : identifier = 11 for COUNTER_SIGN0
+# add to init : from .countersignmessage import CountersignMessage  # noqa: F01
+# modify in headers.py : identifier = 11 for COUNTER_SIGN
 # get location module : 
 # import module_name
 # print(module_name.__file__)
@@ -26,8 +26,8 @@ CBOR = bytes
 
 
 @CoseMessage.record_cbor_tag(11)
-class Countersign0Message(SignCommon):
-    context = "CounterSignature0"
+class CountersignMessage(SignCommon):
+    context = "CounterSignature"
     cbor_tag = 11
     payload_tag = -1
     body_protected = b''
@@ -35,7 +35,7 @@ class Countersign0Message(SignCommon):
     enc = b''
 
     @classmethod
-    def from_cose_obj(cls, cose_obj, allow_unknown_attributes: bool) -> 'Countersign0Message':
+    def from_cose_obj(cls, cose_obj, allow_unknown_attributes: bool) -> 'CountersignMessage':
         msg = super().from_cose_obj(cose_obj, allow_unknown_attributes)
         msg._signature = cose_obj.pop(0)
         return msg
@@ -132,6 +132,6 @@ class Countersign0Message(SignCommon):
     def __repr__(self) -> str:
         phdr, uhdr = self._hdr_repr()
 
-        return f'<COSE_CounterSign0: [{phdr}, {uhdr}, {utils.truncate(self.enc)}, ' \
+        return f'<COSE_CounterSign: [{phdr}, {uhdr}, {utils.truncate(self.enc)}, ' \
                f'{utils.truncate(self._signature)}]>'
 

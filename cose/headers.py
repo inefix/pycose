@@ -56,13 +56,13 @@ class PartialIV(CoseHeaderAttribute):
 
 @CoseHeaderAttribute.register_attribute()
 class CounterSignature(CoseHeaderAttribute):
-    identifier = 7
+    identifier = 11
     fullname = "COUNTER_SIGN"
 
 
 @CoseHeaderAttribute.register_attribute()
 class CounterSignature0(CoseHeaderAttribute):
-    identifier = 11
+    identifier = 9
     fullname = "COUNTER_SIGN0"
 
 

@@ -5,4 +5,4 @@ from .mac0message import Mac0Message  # noqa: F01
 from .macmessage import MacMessage  # noqa: F01
 from .sign1message import Sign1Message  # noqa: F01
 from .signmessage import SignMessage  # noqa: F01
-from .countersign0message import Countersign0Message  # noqa: F01
+from .countersignmessage import CountersignMessage  # noqa: F01
