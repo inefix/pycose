@@ -196,7 +196,7 @@ ContentType.value_parser = content_type_is_uint_or_tstr
 KID.value_parser = is_bstr
 IV.value_parser = is_bstr
 PartialIV.value_parser = is_bstr
-# CounterSignature0.value_parser = is_bstr
+CounterSignature0.value_parser = is_bstr
 KIDContext.value_parser = is_bstr
 
 if __name__ == '__main__':

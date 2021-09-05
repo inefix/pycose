@@ -1,12 +1,3 @@
-# add to init : from .countersignmessage import CountersignMessage  # noqa: F01
-# modify in headers.py : identifier = 11 for COUNTER_SIGN
-# get location module : 
-# import module_name
-# print(module_name.__file__)
-# macos : /usr/local/lib/python3.7/site-packages/cose
-# pi : /home/pi/.local/lib/python3.7/site-packages/cose
-# docker : /usr/local/lib/python3.7/site-packages/cose
-
 from typing import Optional, Union, TYPE_CHECKING
 
 import cbor2
@@ -60,15 +51,6 @@ class CountersignMessage(SignCommon):
         self.body_unprotected = cose_obj[1]
         self.enc = cose_obj[2]
 
-        # print(f"payload loaded : {cbor2.loads(payload)}")
-        # print(f"protected : {self.body_protected}")
-        # print(f"unprotected : {self.body_unprotected}")
-        # print(f"enc : {self.enc}")
-        # print(f"payload_tag : {self.payload_tag}")
-
-        # packet = [self.body_protected, self.body_unprotected, self.enc]
-        # print(payload == cbor2.dumps(cbor2.CBORTag(self.payload_tag, packet), default=self._custom_cbor_encoder))
-        
         super().__init__(phdr, uhdr, payload, external_aad, key, *args, **kwargs)
 
         self._signature = b''
@@ -104,10 +86,8 @@ class CountersignMessage(SignCommon):
             countersign = [self.phdr_encoded, self.uhdr_encoded]
 
         # add countersign to body_unprotected
-        # print(f"unprotected : {self.body_unprotected}")
         self.body_unprotected[self.cbor_tag] = countersign
-        # print(f"unprotected : {self.body_unprotected}")
-        
+
         packet = [self.body_protected, self.body_unprotected, self.enc]
 
         if tag:
@@ -121,11 +101,11 @@ class CountersignMessage(SignCommon):
     def verify_signature(self, *args, **kwargs) -> bool:
         unprotected_len = len(self.body_unprotected[self.cbor_tag])
         self._signature = self.body_unprotected[self.cbor_tag][unprotected_len-1]
-        
+
         if self.phdr == {} :
             self.phdr = {Algorithm: self.key.alg}
             super().__init__(self.phdr, self.uhdr, self.payload, self.external_aad, self.key)
-        
+
         return super().verify_signature(*args, **kwargs)
 
 
@@ -134,4 +114,3 @@ class CountersignMessage(SignCommon):
 
         return f'<COSE_CounterSign: [{phdr}, {uhdr}, {utils.truncate(self.enc)}, ' \
                f'{utils.truncate(self._signature)}]>'
-
